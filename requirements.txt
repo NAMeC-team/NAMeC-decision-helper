@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+rdflib
+owlrl
+pytest
