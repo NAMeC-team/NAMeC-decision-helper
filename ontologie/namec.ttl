@@ -1,0 +1,270 @@
+@prefix : <https://namec.local/ontologie#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://namec.local/ontologie#> .
+
+<https://namec.local/ontologie> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://namec.local/ontologie#aPourCause
+:aPourCause rdf:type owl:ObjectProperty ;
+            owl:inverseOf :causeConcerne ;
+            rdfs:domain :Symptôme ;
+            rdfs:range :Cause .
+
+
+###  https://namec.local/ontologie#aPourNature
+:aPourNature rdf:type owl:ObjectProperty ;
+             rdfs:domain :Composant ;
+             rdfs:range :NatureComposant .
+
+
+###  https://namec.local/ontologie#causeConcerne
+:causeConcerne rdf:type owl:ObjectProperty ;
+               rdfs:domain :Cause ;
+               rdfs:range :Composant .
+
+
+###  https://namec.local/ontologie#contrôle
+:contrôle rdf:type owl:ObjectProperty ;
+          owl:inverseOf :estContrôléPar ;
+          rdf:type owl:AsymmetricProperty ,
+                   owl:IrreflexiveProperty ;
+          rdfs:domain :Contrôleur ;
+          rdfs:range :Composant .
+
+
+###  https://namec.local/ontologie#estConnectéÀ
+:estConnectéÀ rdf:type owl:ObjectProperty ,
+                       owl:SymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain :Composant ;
+              rdfs:range :Composant .
+
+
+###  https://namec.local/ontologie#estContrôléPar
+:estContrôléPar rdf:type owl:ObjectProperty ,
+                         owl:AsymmetricProperty ,
+                         owl:IrreflexiveProperty ;
+                rdfs:domain :Composant ;
+                rdfs:range :Contrôleur .
+
+
+###  https://namec.local/ontologie#estRésoluePar
+:estRésoluePar rdf:type owl:ObjectProperty ;
+               owl:inverseOf :résoud ;
+               rdf:type owl:AsymmetricProperty ;
+               rdfs:domain :Cause ;
+               rdfs:range :Action .
+
+
+###  https://namec.local/ontologie#résoud
+:résoud rdf:type owl:ObjectProperty ,
+                 owl:AsymmetricProperty ;
+        rdfs:domain :Action ;
+        rdfs:range :Cause .
+
+
+###  https://namec.local/ontologie#symptômeAffecte
+:symptômeAffecte rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Symptôme ;
+                 rdfs:range :Composant .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://namec.local/ontologie#Action
+:Action rdf:type owl:Class ;
+        rdfs:subClassOf :ÉléméntDiagnostic .
+
+
+###  https://namec.local/ontologie#Actuateur
+:Actuateur rdf:type owl:Class ;
+           rdfs:subClassOf :Composant .
+
+
+###  https://namec.local/ontologie#Capteur
+:Capteur rdf:type owl:Class ;
+         rdfs:subClassOf :Composant .
+
+
+###  https://namec.local/ontologie#Cause
+:Cause rdf:type owl:Class ;
+       rdfs:subClassOf :ÉléméntDiagnostic .
+
+
+###  https://namec.local/ontologie#Composant
+:Composant rdf:type owl:Class ;
+           rdfs:subClassOf :ÉlémentPhysique .
+
+
+###  https://namec.local/ontologie#Contrôleur
+:Contrôleur rdf:type owl:Class ;
+            rdfs:subClassOf :Composant .
+
+
+###  https://namec.local/ontologie#Descripteur
+:Descripteur rdf:type owl:Class .
+
+
+###  https://namec.local/ontologie#NatureComposant
+:NatureComposant rdf:type owl:Class ;
+                 rdfs:subClassOf :Descripteur .
+
+
+###  https://namec.local/ontologie#Symptôme
+:Symptôme rdf:type owl:Class ;
+          rdfs:subClassOf :ÉléméntDiagnostic .
+
+
+###  https://namec.local/ontologie#ÉlémentPhysique
+:ÉlémentPhysique rdf:type owl:Class .
+
+
+###  https://namec.local/ontologie#ÉléméntDiagnostic
+:ÉléméntDiagnostic rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://namec.local/ontologie#BaseStation
+:BaseStation rdf:type owl:NamedIndividual ,
+                      :Contrôleur ;
+             :aPourNature :Électronique ;
+             :contrôle :UnitéCentraleRobot .
+
+
+###  https://namec.local/ontologie#CapteurInfrarouge
+:CapteurInfrarouge rdf:type owl:NamedIndividual ,
+                            :Capteur ;
+                   :aPourNature :Électronique .
+
+
+###  https://namec.local/ontologie#CarteMoteur_1
+:CarteMoteur_1 rdf:type owl:NamedIndividual ,
+                        :Contrôleur ;
+               :aPourNature :Électronique ;
+               :contrôle :RoueOmnidirectionnelle_1 .
+
+
+###  https://namec.local/ontologie#CarteMoteur_2
+:CarteMoteur_2 rdf:type owl:NamedIndividual ,
+                        :Contrôleur ;
+               :aPourNature :Électronique ;
+               :contrôle :RoueOmnidirectionnelle_2 .
+
+
+###  https://namec.local/ontologie#CarteMoteur_3
+:CarteMoteur_3 rdf:type owl:NamedIndividual ,
+                        :Contrôleur ;
+               :aPourNature :Électronique ;
+               :contrôle :RoueOmnidirectionnelle_3 .
+
+
+###  https://namec.local/ontologie#CarteMoteur_4
+:CarteMoteur_4 rdf:type owl:NamedIndividual ,
+                        :Contrôleur ;
+               :aPourNature :Électronique ;
+               :contrôle :RoueOmnidirectionnelle_4 .
+
+
+###  https://namec.local/ontologie#CâbleDébranché
+:CâbleDébranché rdf:type owl:NamedIndividual ,
+                         :Cause ;
+                :causeConcerne :CapteurInfrarouge ,
+                               :CarteMoteur_1 ,
+                               :CarteMoteur_2 ,
+                               :CarteMoteur_3 ,
+                               :CarteMoteur_4 ,
+                               :RoueOmnidirectionnelle_1 ,
+                               :RoueOmnidirectionnelle_2 ,
+                               :RoueOmnidirectionnelle_3 ,
+                               :RoueOmnidirectionnelle_4 .
+
+
+###  https://namec.local/ontologie#Dribbleur
+:Dribbleur rdf:type owl:NamedIndividual ,
+                    :Actuateur ;
+           :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#Kickeur
+:Kickeur rdf:type owl:NamedIndividual ,
+                  :Actuateur ;
+         :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#Mécanique
+:Mécanique rdf:type owl:NamedIndividual ,
+                    :NatureComposant .
+
+
+###  https://namec.local/ontologie#Reconnecter
+:Reconnecter rdf:type owl:NamedIndividual ,
+                      :Action ;
+             :résoud :CâbleDébranché .
+
+
+###  https://namec.local/ontologie#RoueBloquée
+:RoueBloquée rdf:type owl:NamedIndividual ,
+                      :Symptôme ;
+             :aPourCause :CâbleDébranché ;
+             :symptômeAffecte :RoueOmnidirectionnelle_1 ,
+                              :RoueOmnidirectionnelle_2 ,
+                              :RoueOmnidirectionnelle_3 ,
+                              :RoueOmnidirectionnelle_4 .
+
+
+###  https://namec.local/ontologie#RoueOmnidirectionnelle_1
+:RoueOmnidirectionnelle_1 rdf:type owl:NamedIndividual ,
+                                   :Actuateur ;
+                          :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#RoueOmnidirectionnelle_2
+:RoueOmnidirectionnelle_2 rdf:type owl:NamedIndividual ,
+                                   :Actuateur ;
+                          :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#RoueOmnidirectionnelle_3
+:RoueOmnidirectionnelle_3 rdf:type owl:NamedIndividual ,
+                                   :Actuateur ;
+                          :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#RoueOmnidirectionnelle_4
+:RoueOmnidirectionnelle_4 rdf:type owl:NamedIndividual ,
+                                   :Actuateur ;
+                          :aPourNature :Mécanique .
+
+
+###  https://namec.local/ontologie#UnitéCentraleRobot
+:UnitéCentraleRobot rdf:type owl:NamedIndividual ,
+                             :Contrôleur ;
+                    :aPourNature :Électronique ;
+                    :contrôle :CarteMoteur_1 ,
+                              :CarteMoteur_2 ,
+                              :CarteMoteur_3 ,
+                              :CarteMoteur_4 ,
+                              :Dribbleur ,
+                              :Kickeur .
+
+
+###  https://namec.local/ontologie#Électronique
+:Électronique rdf:type owl:NamedIndividual ,
+                       :NatureComposant ;
+              :contrôle :RoueOmnidirectionnelle_3 .
+
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
