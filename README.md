@@ -16,9 +16,9 @@ Ontologie → système décisionnel → API → interface web
 ```
 namec-decision-helper/
 ├── ontologie/
-├── systeme-decisionnel/
-├── serveur-api/
-└── interface-web/
+├── systeme_decisionnel/
+├── serveur_api/
+└── interface_web/
 ```
 
 ## Installation
@@ -40,7 +40,7 @@ namec-decision-helper/
 
 4. Lancer le script suivant :
     ```
-    python systeme-decisionnel/scripts/test_ontologie.py
+    python systeme-decisionnel/main.py
     ```
 
 ## Stack
