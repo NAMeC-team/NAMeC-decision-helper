@@ -38,9 +38,9 @@ namec-decision-helper/
     pip install -r requirements.txt
     ```
 
-4. Lancer le script suivant :
+4. Lancer le programme en local :
     ```
-    python systeme-decisionnel/main.py
+    python -m systeme_decisionnel.main
     ```
 
 ## Stack
