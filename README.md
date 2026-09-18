@@ -22,9 +22,26 @@ namec-decision-helper/
 ```
 
 ## Installation
-À documenter.
 
-[commandes : pip install, npm install, lancement serveur + front]
+1. Créer un environnement virtuel.
+    ```
+    python -m venv namec_venv
+    ```
+
+2. L'activer.
+    ```
+    namec_venv\Scripts\Activate.ps1
+    ```
+
+3. Installer les prérequis.
+    ```
+    pip install -r requirements.txt
+    ```
+
+4. Lancer le script suivant :
+    ```
+    python systeme-decisionnel/scripts/test_ontologie.py
+    ```
 
 ## Stack
 

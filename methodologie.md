@@ -34,26 +34,27 @@ Voici les différentes étapes clés nécessaires à la conception du MVP :
 ```
 namec-decision-helper/
 ├── ontologie/
-│   └── namec.owl                # créé dans Protégé
+│   └── namec.ttl              # créé dans Protégé
 │
-├── systeme-decisionnel/         # le "cerveau" : lit l'ontologie, raisonne
-│   ├── reasoner.py              # logique de résolution de problème
-│   ├── ontology_access.py       # lecture .owl + requêtes SPARQL (rdflib, owlrl)
-│   └── tests/
+├── systeme-decisionnel/       # le "cerveau" : lit l'ontologie, raisonne
+│   ├── reasoner.py            # logique de résolution de problème
+│   ├── ontology_access.py     # lecture .owl + requêtes SPARQL (rdflib, owlrl)
+|   ├── tests/                 # tests fonctionnels
+│   └── scripts/               # tests de logique décisionnelle
 │
-├── serveur-api/                 # expose le système décisionnel au web
-│   ├── main.py                  # FastAPI, déclaration des routes
+├── serveur-api/               # expose le système décisionnel au web
+│   ├── main.py                # FastAPI, déclaration des routes
 │   ├── routes/
 │   │   ├── graph.py
 │   │   ├── solve.py
 │   │   └── stats.py
-│   └── schemas.py               # Pydantic
+│   └── schemas.py             # Pydantic
 │
-├── interface-web/               # ce que voit l'utilisateur
+├── interface-web/             # ce que voit l'utilisateur
 │   ├── src/
 │   │   ├── main.js
 │   │   ├── api.js
-│   │   ├── graph-view.js        # Cytoscape.js
+│   │   ├── graph-view.js      # Cytoscape.js
 │   │   ├── filter-panel.js
 │   │   ├── stats-panel.js
 │   │   └── styles/
