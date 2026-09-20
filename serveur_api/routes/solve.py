@@ -8,6 +8,7 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException
 
 from systeme_decisionnel.reasoner import Reasoner
+from utils.slugify import slugify
 from serveur_api.schemas import DiagnosticResponse, SolutionItem
 
 router = APIRouter()
@@ -18,6 +19,13 @@ ONTOLOGIE_PATH = Path(__file__).parent.parent.parent / "ontologie" / "namec.ttl"
 # Le Reasoner est chargé une seule fois au démarrage du serveur,
 # pas à chaque requête (l'ontologie ne change pas entre deux appels).
 _reasoner = Reasoner(str(ONTOLOGIE_PATH))
+
+
+@router.get("/symptomes")
+def lister_symptomes():
+    """Renvoie la liste des symptômes disponibles, avec leur slug d'URL."""
+    noms = _reasoner.ontologie.lister_symptomes()
+    return [{"slug": slugify(nom), "label": nom} for nom in noms]
 
 
 @router.get("/solve/{symptome_slug}", response_model=DiagnosticResponse)

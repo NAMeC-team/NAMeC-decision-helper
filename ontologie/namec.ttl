@@ -14,7 +14,6 @@
 
 ###  https://namec.local/ontologie#aPourCause
 :aPourCause rdf:type owl:ObjectProperty ;
-            owl:inverseOf :causeConcerne ;
             rdfs:domain :Symptôme ;
             rdfs:range :Cause .
 

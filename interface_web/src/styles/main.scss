@@ -1,0 +1,163 @@
+// Tokens de design — thème "plan technique / blueprint"
+:root {
+  --blueprint-900: #0f2942;
+  --blueprint-700: #16334e;
+  --blueprint-600: #1e4266;
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --paper: #f2eee3;
+  --paper-dim: #b9c3ce;
+  --signal-amber: #e8a33d;
+  --signal-red: #d6614a;
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--blueprint-900);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--paper);
+  font-family: var(--font-sans);
+  display: flex;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+.panel {
+  width: 100%;
+  max-width: 560px;
+}
+
+.panel__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.panel__subtitle {
+  color: var(--paper-dim);
+  margin: 0 0 32px;
+  font-size: 0.95rem;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+}
+
+select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--blueprint-700);
+  border: 1px solid var(--blueprint-600);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  border-radius: 4px;
+
+  &:focus-visible {
+    outline: 2px solid var(--signal-amber);
+    outline-offset: 2px;
+  }
+}
+
+button {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--signal-amber);
+  color: var(--blueprint-900);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--paper);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.result {
+  margin-top: 32px;
+  border-top: 1px solid var(--blueprint-600);
+  padding-top: 24px;
+}
+
+.result__composants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  background: var(--blueprint-700);
+  border: 1px solid var(--blueprint-600);
+  border-radius: 999px;
+  color: var(--paper-dim);
+}
+
+.solution {
+  padding: 16px;
+  background: var(--blueprint-700);
+  border-left: 3px solid var(--signal-amber);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.solution__cause {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--signal-red);
+  margin-bottom: 6px;
+}
+
+.solution__action {
+  font-size: 1rem;
+}
+
+.result__meta {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+.empty,
+.error {
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--signal-red);
+}
