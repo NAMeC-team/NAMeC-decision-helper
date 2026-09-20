@@ -1,4 +1,7 @@
-import { listerSymptomes, resoudreSymptome } from "./api.js";
+import { listerSymptomes, resoudreSymptome } from "../api.js";
+import { chip } from "../components/chip.js";
+import { solutionCard } from "../components/solution_card.js";
+import { emptyMessage, errorMessage } from "../components/message.js";
 
 export async function initRequestPanel(container) {
   container.innerHTML = `
@@ -56,22 +59,11 @@ export async function initRequestPanel(container) {
 function afficherResultat(resultEl, diagnostic) {
   resultEl.hidden = false;
 
-  const composantsHtml = diagnostic.composants_affectes
-    .map((c) => `<span class="chip">${c}</span>`)
-    .join("");
+  const composantsHtml = diagnostic.composants_affectes.map(chip).join("");
 
   const solutionsHtml = diagnostic.solutions.length
-    ? diagnostic.solutions
-        .map(
-          (s) => `
-        <div class="solution">
-          <div class="solution__cause">${s.cause}</div>
-          <div class="solution__action">${s.action}</div>
-        </div>
-      `
-        )
-        .join("")
-    : `<p class="empty">Aucune solution connue pour ce symptôme pour l'instant.</p>`;
+    ? diagnostic.solutions.map(solutionCard).join("")
+    : emptyMessage("Aucune solution connue pour ce symptôme pour l'instant.");
 
   resultEl.innerHTML = `
     <div class="result__composants">${composantsHtml}</div>
@@ -84,5 +76,5 @@ function afficherResultat(resultEl, diagnostic) {
 
 function afficherErreur(resultEl, message) {
   resultEl.hidden = false;
-  resultEl.innerHTML = `<p class="error">${message}</p>`;
+  resultEl.innerHTML = errorMessage(message);
 }

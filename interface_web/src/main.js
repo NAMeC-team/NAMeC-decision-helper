@@ -1,7 +1,7 @@
 import "./styles/main.scss";
-import { initRequestPanel } from "./request_panel.js";
-import { initGraphPanel } from "./graph_panel.js";
-import { initStatsPanel } from "./stats_panel.js";
+import { initRequestPanel } from "./panels/request_panel.js";
+import { initGraphPanel } from "./panels/graph_panel.js";
+import { initStatsPanel } from "./panels/stats_panel.js";
 
 const app = document.getElementById("app");
 
