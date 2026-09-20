@@ -3,13 +3,15 @@ Accès à l'ontologie NAMeC : chargement du fichier .ttl, application de
 l'inférence OWL, et exécution de requêtes SPARQL.
 
 Ce module est la seule couche du projet à connaître rdflib/owlrl.
-reasoner.py n'importe pas de rdflib directement — il passe
-par les fonctions exposées ici.
+reasoner.py ne doit jamais importer rdflib directement — il passe
+toujours par les fonctions exposées ici.
 """
 
 from pathlib import Path
 from rdflib import Graph
 import owlrl
+
+from utils.slugify import slugify
 
 NS = "https://namec.local/ontologie#"
 
@@ -67,6 +69,28 @@ class OntologyAccess:
 
         resultats = self.query(sparql)
         return [self._nom_court(row.composant) for row in resultats]
+
+    def lister_symptomes(self):
+        """Renvoie la liste de tous les identifiants de symptômes connus."""
+        sparql = """
+        SELECT ?symptome
+        WHERE {
+            ?symptome a :Symptôme .
+        }
+        """
+        resultats = self.query(sparql)
+        return [self._nom_court(row.symptome) for row in resultats]
+
+    def resoudre_slug_symptome(self, slug: str) -> str | None:
+        """
+        Retrouve l'identifiant réel d'un symptôme à partir de son slug
+        (ex: 'roue-bloquee' -> 'RoueBloquée'). Renvoie None si aucun
+        symptôme ne correspond.
+        """
+        for symptome in self.lister_symptomes():
+            if slugify(symptome) == slug:
+                return symptome
+        return None
 
     @staticmethod
     def _nom_court(uri):

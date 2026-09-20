@@ -2,7 +2,7 @@
 Système décisionnel : à partir d'un symptôme, détermine les causes possibles
 et les actions associées.
 
-Ce module ne connaît pas rdflib/owlrl. Il passe
+Ce module ne connaît jamais rdflib/owlrl directement — il passe uniquement
 par OntologyAccess.
 """
 
@@ -43,3 +43,25 @@ class Reasoner:
             composants_affectes=composants,
             solutions=solutions,
         )
+
+    def resoudre_par_slug(self, slug: str) -> ReponseDiagnostic | None:
+        """
+        Comme resoudre(), mais accepte un slug d'URL (ex: 'roue-bloquee')
+        au lieu de l'identifiant exact de l'ontologie. Renvoie None si
+        le slug ne correspond à aucun symptôme connu.
+        """
+        symptome_id = self.ontologie.resoudre_slug_symptome(slug)
+        if symptome_id is None:
+            return None
+        return self.resoudre(symptome_id)
+
+
+if __name__ == "__main__":
+    r = Reasoner("../ontologie/namec.ttl")
+    reponse = r.resoudre("RoueBloquée")
+
+    print(f"Symptôme : {reponse.symptome}")
+    print(f"Composants affectés : {reponse.composants_affectes}")
+    print(f"Solutions trouvées ({reponse.nb_solutions_alternatives}) :")
+    for s in reponse.solutions:
+        print(f"  - Cause : {s['cause']} → Action : {s['action']}")
