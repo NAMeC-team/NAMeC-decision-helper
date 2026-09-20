@@ -1,4 +1,4 @@
-// Tokens de design — thème "plan technique / blueprint"
+// Tokens de design — provisoire, en attente du nouveau thème
 @font-face {
   font-family: "Varela Round";
   src: url("../assets/fonts/VarelaRound-Regular.ttf") format("truetype");
@@ -8,17 +8,15 @@
 }
 
 :root {
-  --blueprint-900: #0f2942;
-  --blueprint-700: #16334e;
-  --blueprint-600: #1e4266;
-  --grid-line: rgba(255, 255, 255, 0.05);
-  --paper: #f2eee3;
-  --paper-dim: #b9c3ce;
+  --bg-page: #eef1f5;
+  --ink: #16334e;
+  --panel-bg: #e5edf4;
+  --panel-border: #accef0;
+  --ink-dim: #707b88;
   --signal-amber: #e8a33d;
   --signal-red: #d6614a;
 
   --font-sans: "Varela Round", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
 }
 
 * {
@@ -28,21 +26,39 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--blueprint-900);
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 32px 32px;
-  color: var(--paper);
+  background-color: var(--bg-page);
+  color: var(--ink);
   font-family: var(--font-sans);
+  padding: 48px 24px;
+}
+
+.layout {
   display: flex;
-  justify-content: center;
-  padding: 64px 24px;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.layout__column {
+  flex: 1;
+  min-width: 0;
+}
+
+.layout__column--request {
+  flex: 0 0 340px;
+}
+
+.layout__column--graph {
+  flex: 2;
+}
+
+.layout__column--stats {
+  flex: 0 0 300px;
 }
 
 .panel {
   width: 100%;
-  max-width: 560px;
 }
 
 .panel__title {
@@ -52,7 +68,7 @@ body {
 }
 
 .panel__subtitle {
-  color: var(--paper-dim);
+  color: var(--ink-dim);
   margin: 0 0 32px;
   font-size: 0.95rem;
 }
@@ -65,16 +81,16 @@ body {
   display: block;
   margin-bottom: 8px;
   font-size: 0.9rem;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
 
 select {
   width: 100%;
   padding: 12px 14px;
-  background: var(--blueprint-700);
-  border: 1px solid var(--blueprint-600);
-  color: var(--paper);
-  font-family: var(--font-mono);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--ink);
+  font-family: var(--font-sans);
   font-size: 0.95rem;
   border-radius: 4px;
 
@@ -88,7 +104,7 @@ button {
   width: 100%;
   padding: 12px 14px;
   background: var(--signal-amber);
-  color: var(--blueprint-900);
+  color: var(--bg-page);
   border: none;
   border-radius: 4px;
   font-family: var(--font-sans);
@@ -102,7 +118,7 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--paper);
+    outline: 2px solid var(--ink);
     outline-offset: 2px;
   }
 
@@ -114,7 +130,7 @@ button {
 
 .result {
   margin-top: 32px;
-  border-top: 1px solid var(--blueprint-600);
+  border-top: 1px solid var(--panel-border);
   padding-top: 24px;
 }
 
@@ -126,25 +142,25 @@ button {
 }
 
 .chip {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.8rem;
   padding: 4px 10px;
-  background: var(--blueprint-700);
-  border: 1px solid var(--blueprint-600);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 999px;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
 
 .solution {
   padding: 16px;
-  background: var(--blueprint-700);
+  background: var(--panel-bg);
   border-left: 3px solid var(--signal-amber);
   border-radius: 4px;
   margin-bottom: 12px;
 }
 
 .solution__cause {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--signal-red);
   margin-bottom: 6px;
@@ -157,15 +173,22 @@ button {
 .result__meta {
   margin-top: 16px;
   font-size: 0.85rem;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
 
 .empty,
 .error {
-  color: var(--paper-dim);
+  color: var(--ink-dim);
   font-size: 0.9rem;
 }
 
 .error {
   color: var(--signal-red);
+}
+
+.placeholder-box {
+  border: 1px dashed var(--panel-border);
+  border-radius: 4px;
+  padding: 24px;
+  text-align: center;
 }
