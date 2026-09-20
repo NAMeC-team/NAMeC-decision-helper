@@ -1,4 +1,3 @@
-// Tokens de design — provisoire, en attente du nouveau thème
 @font-face {
   font-family: "Varela Round";
   src: url("../assets/fonts/VarelaRound-Regular.ttf") format("truetype");
@@ -15,12 +14,28 @@
   --ink-dim: #707b88;
   --signal-amber: #e8a33d;
   --signal-red: #d6614a;
+  --highlight: rgba(129, 190, 230, 0.25); // surlignage bleu océan semi-transparent
 
   --font-sans: "Varela Round", system-ui, sans-serif;
+
+  // Espacements fluides — horizontal en vw, vertical en vh
+  --space-xs: 0.4vw;
+  --space-sm: 0.8vw;
+  --space-md: 1.6vw;
+  --space-lg: 2.4vw;
+  --space-xl: 3.2vw;
+
+  --space-v-sm: 1.2vh;
+  --space-v-md: 2.4vh;
+  --space-v-lg: 4vh;
 }
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: var(--highlight);
 }
 
 body {
@@ -29,33 +44,26 @@ body {
   background-color: var(--bg-page);
   color: var(--ink);
   font-family: var(--font-sans);
-  padding: 48px 24px;
+  padding: var(--space-v-lg) var(--space-lg);
 }
+
+// ---------- Layout 3 colonnes ----------
 
 .layout {
   display: flex;
-  gap: 24px;
+  gap: var(--space-lg);
   align-items: flex-start;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .layout__column {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
+  min-height: 60vh;
 }
 
-.layout__column--request {
-  flex: 0 0 340px;
-}
-
-.layout__column--graph {
-  flex: 2;
-}
-
-.layout__column--stats {
-  flex: 0 0 300px;
-}
+// ---------- Panel générique ----------
 
 .panel {
   width: 100%;
@@ -64,35 +72,41 @@ body {
 .panel__title {
   font-size: 1.5rem;
   font-weight: 600;
-  margin: 0 0 4px;
+  margin: 0 0 var(--space-v-sm);
 }
 
 .panel__subtitle {
   color: var(--ink-dim);
-  margin: 0 0 32px;
+  margin: 0 0 var(--space-v-md);
   font-size: 0.95rem;
 }
 
+// ---------- Formulaire (request_panel) ----------
+
 .field {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-v-sm);
 }
 
 .field label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-xs);
   font-size: 0.9rem;
   color: var(--ink-dim);
 }
 
 select {
   width: 100%;
-  padding: 12px 14px;
+  padding: var(--space-sm) var(--space-md);
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 0.95rem;
   border-radius: 4px;
+
+  &:hover {
+    background: var(--highlight);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--signal-amber);
@@ -102,9 +116,9 @@ select {
 
 button {
   width: 100%;
-  padding: 12px 14px;
+  padding: var(--space-sm) var(--space-md);
   background: var(--signal-amber);
-  color: var(--bg-page);
+  color: var(--ink);
   border: none;
   border-radius: 4px;
   font-family: var(--font-sans);
@@ -128,23 +142,25 @@ button {
   }
 }
 
+// ---------- Résultat du diagnostic ----------
+
 .result {
-  margin-top: 32px;
+  margin-top: var(--space-v-md);
   border-top: 1px solid var(--panel-border);
-  padding-top: 24px;
+  padding-top: var(--space-v-sm);
 }
 
 .result__composants {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-v-md);
 }
 
 .chip {
   font-family: var(--font-sans);
   font-size: 0.8rem;
-  padding: 4px 10px;
+  padding: var(--space-xs) var(--space-sm);
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 999px;
@@ -152,18 +168,18 @@ button {
 }
 
 .solution {
-  padding: 16px;
+  padding: var(--space-md);
   background: var(--panel-bg);
   border-left: 3px solid var(--signal-amber);
   border-radius: 4px;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-v-sm);
 }
 
 .solution__cause {
   font-family: var(--font-sans);
   font-size: 0.85rem;
   color: var(--signal-red);
-  margin-bottom: 6px;
+  margin-bottom: var(--space-xs);
 }
 
 .solution__action {
@@ -171,10 +187,12 @@ button {
 }
 
 .result__meta {
-  margin-top: 16px;
+  margin-top: var(--space-v-sm);
   font-size: 0.85rem;
   color: var(--ink-dim);
 }
+
+// ---------- États vide / erreur ----------
 
 .empty,
 .error {
@@ -189,6 +207,49 @@ button {
 .placeholder-box {
   border: 1px dashed var(--panel-border);
   border-radius: 4px;
-  padding: 24px;
+  padding: var(--space-lg);
   text-align: center;
+}
+
+// ---------- Tiroir statistiques (stats_panel) ----------
+
+.layout__column--stats {
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-drawer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  background: var(--bg-page);
+}
+
+.stats-drawer__handle {
+  flex: 0 0 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px 0 0 4px;
+  cursor: grab;
+  touch-action: none;
+
+  &:hover {
+    background: var(--highlight);
+  }
+}
+
+.stats-drawer__grip {
+  width: 3px;
+  height: 32px;
+  background: var(--ink-dim);
+  border-radius: 2px;
+}
+
+.stats-drawer__content {
+  flex: 1 1 auto;
+  padding: var(--space-md);
+  overflow-y: auto;
 }
