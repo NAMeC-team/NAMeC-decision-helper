@@ -8,7 +8,7 @@ Point d'entrée du serveur API. Lance avec :
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from serveur_api.routes import solve
+from serveur_api.routes import solve, graph
 
 app = FastAPI(
     title="NAMeC Decision Helper API",
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 app.include_router(solve.router)
+app.include_router(graph.router)
 
 
 @app.get("/")
