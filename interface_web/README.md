@@ -4,7 +4,7 @@ Ce fichier permet d'expliquer comment fonctionne la partie d'interface web du de
 ## Objectif
 Ce dossier permet de générer l'interface web, grâce à Node.
 
-## Outils
+## Stack
 - Node (Vite) 
 - JS
 
