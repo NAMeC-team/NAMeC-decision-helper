@@ -43,6 +43,22 @@ namec-decision-helper/
     python -m systeme_decisionnel.main
     ```
 
+5. Ou alors, lancer le programme avec serveur :
+   
+   - Terminal 1
+    ```
+    uvicorn serveur_api.main:app --reload
+    ```
+
+   - Terminal 2
+    ```
+    cd interface_web
+    npm install // (si pas déjà fait)
+    npm run dev
+    ```
+
+    L'interface web est ensuite disponible sur le local host.
+
 ## Stack
 
 ### Graphe des connaissances
