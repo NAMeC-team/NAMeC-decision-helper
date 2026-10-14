@@ -8,7 +8,7 @@ toujours par les fonctions exposées ici.
 """
 
 from pathlib import Path
-from rdflib import Graph
+from rdflib import Graph, RDF, OWL
 import owlrl
 
 from utils.slugify import slugify
@@ -20,6 +20,7 @@ class OntologyAccess:
     def __init__(self, ttl_path: str):
         self.ttl_path = Path(ttl_path)
         self.graph = Graph()
+        self.graph_brut = Graph()  # copie sans inférence, pour la visualisation
         self._charger()
         self._appliquer_inference()
 
@@ -27,6 +28,7 @@ class OntologyAccess:
         if not self.ttl_path.exists():
             raise FileNotFoundError(f"Fichier introuvable : {self.ttl_path}")
         self.graph.parse(self.ttl_path, format="turtle")
+        self.graph_brut.parse(self.ttl_path, format="turtle")
 
     def _appliquer_inference(self):
         owlrl.DeductiveClosure(owlrl.OWLRL_Semantics).expand(self.graph)
@@ -69,6 +71,41 @@ class OntologyAccess:
 
         resultats = self.query(sparql)
         return [self._nom_court(row.composant) for row in resultats]
+
+    def exporter_graphe(self):
+        """
+        Exporte le graphe brut (non inféré) au format nœuds/arêtes,
+        limité aux individus réels (pas les classes/propriétés de
+        l'ontologie elle-même), exploitable par Cytoscape.js.
+        """
+        individus = {
+            s for s, _, _ in self.graph_brut.triples((None, RDF.type, OWL.NamedIndividual))
+        }
+
+        nodes = {}
+        for ind in individus:
+            for _, _, type_ in self.graph_brut.triples((ind, RDF.type, None)):
+                if type_ == OWL.NamedIndividual:
+                    continue
+                nodes[self._nom_court(ind)] = self._nom_court(type_)
+                break
+
+        edges = []
+        for s, p, o in self.graph_brut:
+            if s not in individus or o not in individus:
+                continue
+            edges.append(
+                {
+                    "source": self._nom_court(s),
+                    "target": self._nom_court(o),
+                    "label": self._nom_court(p),
+                }
+            )
+
+        return {
+            "nodes": [{"id": nom, "type": type_} for nom, type_ in nodes.items()],
+            "edges": edges,
+        }
 
     def lister_symptomes(self):
         """Renvoie la liste de tous les identifiants de symptômes connus."""
