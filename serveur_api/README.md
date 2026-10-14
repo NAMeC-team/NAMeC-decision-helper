@@ -1,4 +1,4 @@
-# Interface Web
+# Serveur API
 Ce fichier permet d'expliquer comment fonctionne la partie serveur API du decision helper.
 
 ## Objectif
