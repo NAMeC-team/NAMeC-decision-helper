@@ -33,8 +33,7 @@ Voici les différentes étapes clés nécessaires à la conception du MVP :
 
 ```
 namec-decision-helper/
-├── ontologie/
-│   └── namec.ttl              # créé dans Protégé
+├── ontologie/                 # arbre de fichiers YAML
 │
 ├── systeme_decisionnel/       # le "cerveau" : lit l'ontologie, raisonne
 │   ├── main.py                

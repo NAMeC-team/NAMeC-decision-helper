@@ -1,0 +1,15 @@
+id: cable_debranche
+nom: Câble débranché
+liens:
+  concerne:
+  - capteur_infrarouge
+  - carte_moteur_1
+  - carte_moteur_2
+  - carte_moteur_3
+  - carte_moteur_4
+  - roue_omni_1
+  - roue_omni_2
+  - roue_omni_3
+  - roue_omni_4
+  traitee_par:
+  - reconnecter_cable

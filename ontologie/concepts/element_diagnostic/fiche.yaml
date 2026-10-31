@@ -1,0 +1,4 @@
+id: element_diagnostic
+nom: Élément de diagnostic
+description: 'Concepts qui servent à raisonner sur une panne : ce qu''on observe,
+  ce qui la provoque, comment la traiter.'

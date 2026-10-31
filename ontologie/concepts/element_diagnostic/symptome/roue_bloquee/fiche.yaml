@@ -1,0 +1,10 @@
+id: roue_bloquee
+nom: Roue bloquée
+liens:
+  affecte:
+  - roue_omni_1
+  - roue_omni_2
+  - roue_omni_3
+  - roue_omni_4
+  a_pour_cause:
+  - cable_debranche

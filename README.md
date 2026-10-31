@@ -62,9 +62,7 @@ namec-decision-helper/
 ## Stack
 
 ### Graphe des connaissances
-- **Protégé** : création de l'ontologie (.owl)
-- **rdflib** : lecture de l'ontologie et requêtes SPARQL en Python
-- **owlrl** : moteur d'inférence logique
+- En cours de refacto
 
 ### Serveur / API
 - **FastAPI** : exposition des requêtes en API REST

@@ -1,0 +1,6 @@
+id: kickeur
+nom: Kickeur
+description: Lance la balle avec force.
+liens:
+  a_pour_nature:
+  - mecanique

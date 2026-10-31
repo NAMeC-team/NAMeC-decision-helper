@@ -1,0 +1,6 @@
+id: dribbleur
+nom: Dribbleur
+description: Récupère la balle ou la fait glisser.
+liens:
+  a_pour_nature:
+  - mecanique

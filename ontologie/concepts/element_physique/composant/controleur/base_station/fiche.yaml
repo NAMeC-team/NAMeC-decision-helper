@@ -1,0 +1,7 @@
+id: base_station
+nom: Base station
+liens:
+  a_pour_nature:
+  - electronique
+  controle:
+  - unite_centrale_robot

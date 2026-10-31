@@ -1,0 +1,7 @@
+id: carte_moteur_1
+nom: Carte moteur 1
+liens:
+  a_pour_nature:
+  - electronique
+  controle:
+  - roue_omni_1

@@ -1,0 +1,54 @@
+# Vocabulaire des liens : liste fermée des relations autorisées dans les fiches.
+# Équivalent des « object properties » de Protégé.
+#
+# Chaque lien s'écrit d'UN SEUL côté (celui de la fiche de départ) :
+# le sens inverse est déduit automatiquement.
+#   de   : id d'un concept ; la fiche de départ doit être ce concept ou l'un de ses descendants
+#   vers : id d'un concept ; les fiches ciblées doivent être ce concept ou l'un de ses descendants
+
+affecte:
+  description: Un symptôme affecte un composant.
+  inverse: est_affecte_par
+  de: symptome
+  vers: composant
+
+a_pour_cause:
+  description: Un symptôme peut avoir pour cause...
+  inverse: est_cause_de
+  de: symptome
+  vers: cause
+
+concerne:
+  description: Une cause concerne un composant.
+  inverse: est_concernee_par
+  de: cause
+  vers: composant
+
+traitee_par:
+  description: Une cause est traitée par une action.
+  inverse: traite
+  de: cause
+  vers: action
+
+controle:
+  description: Un composant en pilote un autre.
+  inverse: est_controle_par
+  de: composant
+  vers: composant
+
+est_connecte_a:
+  description: Deux composants sont connectés (relation réciproque).
+  symetrique: true
+  de: composant
+  vers: composant
+
+a_pour_nature:
+  description: Nature physique d'un composant (mécanique, électronique...).
+  de: composant
+  vers: nature
+
+fait_partie_de:
+  description: Un composant est une partie physique d'un ensemble plus grand.
+  inverse: contient
+  de: composant
+  vers: composant

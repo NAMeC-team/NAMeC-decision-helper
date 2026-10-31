@@ -1,0 +1,5 @@
+id: roue_omni_1
+nom: Roue omnidirectionnelle 1
+liens:
+  a_pour_nature:
+  - mecanique

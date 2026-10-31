@@ -1,0 +1,5 @@
+id: capteur_infrarouge
+nom: Capteur infrarouge
+liens:
+  a_pour_nature:
+  - electronique
