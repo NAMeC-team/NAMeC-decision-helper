@@ -1,7 +1,7 @@
 # Vocabulaire des liens : liste fermée des relations autorisées dans les fiches.
 # Équivalent des « object properties » de Protégé.
 #
-# Chaque lien s'écrit d'UN SEUL côté (celui de la fiche de départ) :
+# Chaque lien s'écrit d'un seul côté (celui de la fiche de départ) :
 # le sens inverse est déduit automatiquement.
 #   de   : id d'un concept ; la fiche de départ doit être ce concept ou l'un de ses descendants
 #   vers : id d'un concept ; les fiches ciblées doivent être ce concept ou l'un de ses descendants
