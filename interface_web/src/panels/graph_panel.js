@@ -19,6 +19,10 @@ const STYLE = [
     },
   },
   {
+    selector: "node.symptome",
+    style: { "background-color": "#d6614a" },   // = --signal-red
+  },
+  {
     // Liens nommés (affecte, a_pour_cause...) : flèche, nom écrit au-dessus du trait
     selector: "edge",
     style: {
@@ -62,7 +66,10 @@ export async function initGraphPanel(container) {
     cytoscape({
       container: canvas,
       elements: [
-        ...nodes.map((n) => ({ data: { id: n.id, label: n.nom } })),
+        ...nodes.map((n) => ({
+          data: { id: n.id, label: n.nom },
+          classes: n.symptome ? "symptome" : "",
+        })),
         ...edges.map((e) => ({
           data: { source: e.source, target: e.target, label: e.label.replaceAll("_", " ") },
           classes: e.type,

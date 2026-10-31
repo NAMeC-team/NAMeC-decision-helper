@@ -83,7 +83,11 @@ class OntologyAccess:
             return fiche_id
 
         affichees = {i for i in self.fiches if representant(i) == i}
-        noeuds = [{"id": i, "nom": f["nom"]} for i, f in self.fiches.items() if i in affichees]
+        noeuds = [
+            {"id": i, "nom": f["nom"], "symptome": self.est_un_symptome(i)}
+            for i, f in self.fiches.items()
+            if i in affichees
+        ]
 
         aretes = []
         for fiche_id in affichees:
