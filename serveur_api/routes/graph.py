@@ -1,7 +1,4 @@
-"""
-Route d'export du graphe de connaissances, au format nœuds/arêtes
-consommable directement par Cytoscape.js.
-"""
+"""Route d'export du graphe de connaissances (nœuds + arêtes) pour Cytoscape.js."""
 
 from fastapi import APIRouter
 

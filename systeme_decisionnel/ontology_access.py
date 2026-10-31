@@ -60,3 +60,21 @@ class OntologyAccess:
                     "description": self.fiches[action_id].get("description"),
                 })
         return solutions
+
+    # ---------- Export pour la visualisation ----------
+
+    def exporter_graphe(self) -> dict:
+        """Un nœud par fiche ; arêtes « hierarchie » (dossier parent -> enfant) et « lien » (nommées)."""
+        noeuds = [{"id": i, "nom": f["nom"]} for i, f in self.fiches.items()]
+
+        aretes = []
+        for fiche_id, lignee in self.lignees.items():
+            if len(lignee) > 1 and lignee[-2] in self.fiches:
+                aretes.append({"source": lignee[-2], "target": fiche_id, "label": "", "type": "hierarchie"})
+
+        for fiche_id, fiche in self.fiches.items():
+            for lien in fiche.get("liens") or {}:
+                for cible in self._cibles(fiche_id, lien):
+                    aretes.append({"source": fiche_id, "target": cible, "label": lien, "type": "lien"})
+
+        return {"nodes": noeuds, "edges": aretes}

@@ -18,3 +18,9 @@ export async function resoudreSymptome(slug) {
   }
   return reponse.json();
 }
+
+export async function obtenirGraphe() {
+  const reponse = await fetch(`${API_BASE_URL}/graph`);
+  if (!reponse.ok) throw new Error("Impossible de récupérer le graphe, ahaaa, dommaaaage... Comment faire ? Demander à Wanchaï ? Non non non. Demander à Anaelle, qui vous dira, mais qu'est-ce que vous avez fait encore ! Vous avez bien complété la doc, j'espère ?")
+  return reponse.json();
+}
