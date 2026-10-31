@@ -1,135 +1,62 @@
 """
-Accès à l'ontologie NAMeC : chargement du fichier .ttl, application de
-l'inférence OWL, et exécution de requêtes SPARQL.
+Accès à l'ontologie : lit les fiches YAML (ontologie/concepts/**/fiche.yaml)
+et permet de suivre les liens d'une fiche à l'autre.
 
-Ce module est la seule couche du projet à connaître rdflib/owlrl.
-reasoner.py ne doit jamais importer rdflib directement — il passe
-toujours par les fonctions exposées ici.
+C'est le seul fichier qui sait comment la connaissance est stockée.
 """
 
 from pathlib import Path
-from rdflib import Graph, RDF, OWL
-import owlrl
 
-from utils.slugify import slugify
-
-NS = "https://namec.local/ontologie#"
+import yaml
 
 
 class OntologyAccess:
-    def __init__(self, ttl_path: str):
-        self.ttl_path = Path(ttl_path)
-        self.graph = Graph()
-        self.graph_brut = Graph()  # copie sans inférence, pour la visualisation
-        self._charger()
-        self._appliquer_inference()
+    def __init__(self, dossier_ontologie: str):
+        self.fiches = {}     # id -> contenu de la fiche
+        self.lignees = {}    # id -> dossiers traversés, ex: ("element_diagnostic", "symptome", "roue_bloquee")
+        self._charger(Path(dossier_ontologie) / "concepts")
 
-    def _charger(self):
-        if not self.ttl_path.exists():
-            raise FileNotFoundError(f"Fichier introuvable : {self.ttl_path}")
-        self.graph.parse(self.ttl_path, format="turtle")
-        self.graph_brut.parse(self.ttl_path, format="turtle")
+    def _charger(self, dossier_concepts: Path):
+        if not dossier_concepts.is_dir():
+            raise FileNotFoundError(f"Dossier introuvable : {dossier_concepts}")
+        for chemin in sorted(dossier_concepts.rglob("fiche.yaml")):
+            with open(chemin, encoding="utf-8") as f:
+                fiche = yaml.safe_load(f)
+            self.fiches[fiche["id"]] = fiche
+            self.lignees[fiche["id"]] = chemin.relative_to(dossier_concepts).parts[:-1]
 
-    def _appliquer_inference(self):
-        owlrl.DeductiveClosure(owlrl.OWLRL_Semantics).expand(self.graph)
+    # ---------- Lecture ----------
 
-    def query(self, sparql: str):
-        """Exécute une requête SPARQL brute et renvoie les résultats."""
-        prefixe = f"PREFIX : <{NS}>\n"
-        return self.graph.query(prefixe + sparql)
+    def nom(self, fiche_id: str) -> str:
+        return self.fiches[fiche_id]["nom"]
 
-    def trouver_causes_et_actions(self, symptome_id: str):
-        """
-        Étant donné l'identifiant court d'un symptôme (ex: 'RoueBloquée'),
-        renvoie la liste des (cause, action) possibles.
-        """
-        sparql = """
-        SELECT ?cause ?action
-        WHERE {
-            :%s :aPourCause ?cause .
-            ?action :résoud ?cause .
-        }
-        """ % symptome_id
+    def _cibles(self, fiche_id: str, lien: str) -> list[str]:
+        """Ids pointés par un lien d'une fiche (liste vide si le lien n'existe pas)."""
+        liens = self.fiches[fiche_id].get("liens") or {}
+        return [c for c in liens.get(lien, []) if c in self.fiches]
 
-        resultats = self.query(sparql)
+    def est_un_symptome(self, fiche_id: str) -> bool:
+        # « symptome » doit être un dossier PARENT : la catégorie elle-même n'est pas un symptôme.
+        return fiche_id in self.fiches and "symptome" in self.lignees[fiche_id][:-1]
+
+    def lister_symptomes(self) -> list[dict]:
         return [
-            {
-                "cause": self._nom_court(row.cause),
-                "action": self._nom_court(row.action),
-            }
-            for row in resultats
+            {"id": i, "nom": f["nom"]}
+            for i, f in self.fiches.items()
+            if self.est_un_symptome(i)
         ]
 
-    def composants_affectes(self, symptome_id: str):
-        """Renvoie la liste des composants affectés par un symptôme."""
-        sparql = """
-        SELECT ?composant
-        WHERE {
-            :%s :symptômeAffecte ?composant .
-        }
-        """ % symptome_id
+    def composants_affectes(self, symptome_id: str) -> list[str]:
+        return [self.nom(c) for c in self._cibles(symptome_id, "affecte")]
 
-        resultats = self.query(sparql)
-        return [self._nom_court(row.composant) for row in resultats]
-
-    def exporter_graphe(self):
-        """
-        Exporte le graphe brut (non inféré) au format nœuds/arêtes,
-        limité aux individus réels (pas les classes/propriétés de
-        l'ontologie elle-même), exploitable par Cytoscape.js.
-        """
-        individus = {
-            s for s, _, _ in self.graph_brut.triples((None, RDF.type, OWL.NamedIndividual))
-        }
-
-        nodes = {}
-        for ind in individus:
-            for _, _, type_ in self.graph_brut.triples((ind, RDF.type, None)):
-                if type_ == OWL.NamedIndividual:
-                    continue
-                nodes[self._nom_court(ind)] = self._nom_court(type_)
-                break
-
-        edges = []
-        for s, p, o in self.graph_brut:
-            if s not in individus or o not in individus:
-                continue
-            edges.append(
-                {
-                    "source": self._nom_court(s),
-                    "target": self._nom_court(o),
-                    "label": self._nom_court(p),
-                }
-            )
-
-        return {
-            "nodes": [{"id": nom, "type": type_} for nom, type_ in nodes.items()],
-            "edges": edges,
-        }
-
-    def lister_symptomes(self):
-        """Renvoie la liste de tous les identifiants de symptômes connus."""
-        sparql = """
-        SELECT ?symptome
-        WHERE {
-            ?symptome a :Symptôme .
-        }
-        """
-        resultats = self.query(sparql)
-        return [self._nom_court(row.symptome) for row in resultats]
-
-    def resoudre_slug_symptome(self, slug: str) -> str | None:
-        """
-        Retrouve l'identifiant réel d'un symptôme à partir de son slug
-        (ex: 'roue-bloquee' -> 'RoueBloquée'). Renvoie None si aucun
-        symptôme ne correspond.
-        """
-        for symptome in self.lister_symptomes():
-            if slugify(symptome) == slug:
-                return symptome
-        return None
-
-    @staticmethod
-    def _nom_court(uri):
-        """Extrait le nom court d'une URI complète (après le '#')."""
-        return str(uri).split("#")[-1]
+    def trouver_causes_et_actions(self, symptome_id: str) -> list[dict]:
+        """symptôme -> causes -> actions."""
+        solutions = []
+        for cause_id in self._cibles(symptome_id, "a_pour_cause"):
+            for action_id in self._cibles(cause_id, "traitee_par"):
+                solutions.append({
+                    "cause": self.nom(cause_id),
+                    "action": self.nom(action_id),
+                    "description": self.fiches[action_id].get("description"),
+                })
+        return solutions

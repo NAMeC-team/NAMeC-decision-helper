@@ -8,6 +8,5 @@ from pathlib import Path
 
 from systeme_decisionnel.reasoner import Reasoner
 
-ONTOLOGIE_PATH = Path(__file__).parent.parent / "ontologie" / "namec.ttl"
-
+ONTOLOGIE_PATH = Path(__file__).parent.parent / "ontologie"
 reasoner = Reasoner(str(ONTOLOGIE_PATH))

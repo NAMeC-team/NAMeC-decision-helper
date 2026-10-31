@@ -1,6 +1,5 @@
 fastapi
 uvicorn[standard]
 pydantic
-rdflib
-owlrl
+pyyaml
 pytest

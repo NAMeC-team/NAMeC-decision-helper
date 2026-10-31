@@ -10,6 +10,7 @@ from pydantic import BaseModel
 class SolutionItem(BaseModel):
     cause: str
     action: str
+    description: str | None = None
 
 
 class DiagnosticResponse(BaseModel):

@@ -6,7 +6,7 @@ sans passer par l'API.
 from pathlib import Path
 from .reasoner import Reasoner
 
-ONTOLOGIE_PATH = Path(__file__).parent.parent / "ontologie" / "namec.ttl"
+ONTOLOGIE_PATH = Path(__file__).parent.parent / "ontologie" / "concepts"
 
 def main():
     r = Reasoner(ONTOLOGIE_PATH)
