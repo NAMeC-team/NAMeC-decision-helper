@@ -1,0 +1,9 @@
+id: transistor_kickeur_mort
+nom: Transistor kickeur mort
+liens:
+  concerne:
+  - transistor_kickeur
+  - kickeur
+  traitee_par:
+  - remplacer_carte_kickeur
+  - remplacer_transistor_kickeur

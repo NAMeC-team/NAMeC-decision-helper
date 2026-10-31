@@ -1,0 +1,7 @@
+id: kickeur_mort
+nom: Kickeur Mort
+liens:
+  affecte:
+  - kickeur
+  a_pour_cause:
+  - transistor_kickeur_mort

@@ -1,0 +1,9 @@
+id: transistor_kickeur
+nom: Transistor kickeur
+liens:
+  a_pour_nature:
+  - electronique
+  controle:
+  - kickeur
+  fait_partie_de:
+  - carte_kickeur
