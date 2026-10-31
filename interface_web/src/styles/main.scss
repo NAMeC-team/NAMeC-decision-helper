@@ -186,6 +186,12 @@ button {
   font-size: 1rem;
 }
 
+.solution__description {
+  margin: var(--space-v-sm) 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-dim);
+}
+
 .result__meta {
   margin-top: var(--space-v-sm);
   font-size: 0.85rem;
