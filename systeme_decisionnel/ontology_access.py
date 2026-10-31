@@ -63,18 +63,43 @@ class OntologyAccess:
 
     # ---------- Export pour la visualisation ----------
 
-    def exporter_graphe(self) -> dict:
-        """Un nœud par fiche ; arêtes « hierarchie » (dossier parent -> enfant) et « lien » (nommées)."""
-        noeuds = [{"id": i, "nom": f["nom"]} for i, f in self.fiches.items()]
+    def exporter_graphe(self, exclure: tuple[str, ...] = (), replier: tuple[str, ...] = ()) -> dict:
+        """
+        Un nœud par fiche ; arêtes « hierarchie » (dossier parent -> enfant) et « lien » (nommées).
+
+        exclure : ids de concepts à masquer, avec tous leurs descendants.
+        replier : ids de concepts dont on cache les descendants mais pas le concept lui-même.
+                  Les liens des descendants cachés sont remontés sur ce concept.
+        """
+
+        def representant(fiche_id):
+            """Fiche affichée à la place de fiche_id : elle-même, son ancêtre replié, ou None si exclue."""
+            lignee = self.lignees[fiche_id]
+            if any(e in lignee for e in exclure):
+                return None
+            for ancetre in lignee[:-1]:          # du plus haut au plus proche
+                if ancetre in replier and ancetre in self.fiches:
+                    return ancetre
+            return fiche_id
+
+        affichees = {i for i in self.fiches if representant(i) == i}
+        noeuds = [{"id": i, "nom": f["nom"]} for i, f in self.fiches.items() if i in affichees]
 
         aretes = []
-        for fiche_id, lignee in self.lignees.items():
-            if len(lignee) > 1 and lignee[-2] in self.fiches:
+        for fiche_id in affichees:
+            lignee = self.lignees[fiche_id]
+            if len(lignee) > 1 and lignee[-2] in affichees:
                 aretes.append({"source": lignee[-2], "target": fiche_id, "label": "", "type": "hierarchie"})
 
+        liens_vus = set()    # évite les doublons quand plusieurs enfants cachés pointent au même endroit
         for fiche_id, fiche in self.fiches.items():
             for lien in fiche.get("liens") or {}:
                 for cible in self._cibles(fiche_id, lien):
-                    aretes.append({"source": fiche_id, "target": cible, "label": lien, "type": "lien"})
+                    source, destination = representant(fiche_id), representant(cible)
+                    if source is None or destination is None or source == destination:
+                        continue
+                    if (source, destination, lien) not in liens_vus:
+                        liens_vus.add((source, destination, lien))
+                        aretes.append({"source": source, "target": destination, "label": lien, "type": "lien"})
 
         return {"nodes": noeuds, "edges": aretes}
